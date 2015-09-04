@@ -17,7 +17,7 @@ module Reader
 
     def channel_by_id(id)
       channel = client.xquery("select * from channels where id = ?",id).first
-      Channel.new(channel) unless channel.nil?
+      return Channel.new(channel) unless channel.nil?
       nil
     end
 
