@@ -32,17 +32,15 @@ describe "Retrieve items from Channel" do
   end
 
 
-  it "Seek new items from channel fails result but not raise exceptions" do
+  it "Seek new items from channel fails result and raise exceptions" do
 
     url = 'http://www.reddit.com/r/science/.rss'
     feeder = mock()
     results = mock()
     feeder.expects(:rss_from).raises
-    results.expects(:items).returns([])
+    results.expects(:items).never
     client = Reader::Client.new(feeder)
-    items = client.retrieve_from url
-    items.wont_be_nil
-    items.must_be_empty 
+    -> { client.retrieve_from url }.must_raise RuntimeError
 
   end
 
