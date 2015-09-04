@@ -15,6 +15,10 @@ module Reader
       client.query("select * from channels").map(&Channel.method(:new))
     end
 
+    def channel_by_id(id)
+      Channel.new(client.xquery("select * from channels where id = ?",id).first)
+    end
+
     def save(items, channel)
       items.map do |i|
         i.channel_id = channel.id

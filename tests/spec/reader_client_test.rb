@@ -13,6 +13,7 @@ describe "Retrieve items from Channel" do
     feeder.expects(:rss_from).with(url).returns(results)
     results.expects(:items).returns([:link => "item1", :link=> "item2"])
     persistence = mock()
+    persistence.expects(:channel_by_id).returns(channel)
     persistence.expects(:save).returns([{:link => "item1", :was_updated=>true}, {:link=> "item2",:was_updated=>true}].map(&Reader::Item.method(:new)))
     client = Reader::Client.new(feeder,persistence)
     items = client.retrieve_from channel
@@ -31,6 +32,7 @@ describe "Retrieve items from Channel" do
     feeder.expects(:rss_from).with(url).returns(results)
     results.expects(:items).returns([])
     persistence = mock()
+    persistence.expects(:channel_by_id).returns(channel)
     persistence.expects(:save).returns([{:link => "item1", :was_updated=>false}, {:link=> "item2",:was_updated=>false}].map(&Reader::Item.method(:new)))
     client = Reader::Client.new(feeder,persistence)
     items = client.retrieve_from channel
@@ -50,8 +52,8 @@ describe "Retrieve items from Channel" do
     feeder.expects(:rss_from).raises
     results.expects(:items).never
     persistence = mock()
+    persistence.expects(:channel_by_id).returns(channel)
     client = Reader::Client.new(feeder,persistence)    
-    client = Reader::Client.new(feeder)
     -> { client.retrieve_from channel }.must_raise RuntimeError
 
   end
