@@ -10,13 +10,14 @@ module Reader
       super
     end
 
-    def title
-      @title.force_encoding("UTF-8")
+    ["title", "description"].each do |field|
+      define_method("#{field}_enc") do 
+        value = send(field.to_sym)
+        return value unless value.encoding.name == 'UTF-8'
+        value.force_encoding("UTF-8")
+      end
     end
 
-    def description
-      CGI.unescapeHTML(@description.force_encoding("UTF-8"))
-    end
   end
 
 end

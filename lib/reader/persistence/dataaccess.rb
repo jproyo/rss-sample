@@ -6,7 +6,12 @@ module Reader
     attr_reader :options
 
     def initialize(options={})
-      @options = {:database => "rss_reader"}
+      @options = {
+        :database => ENV['RSS_DB_NAME'] || "rss_reader",
+        :host => ENV['RSS_DB_HOST'] || "localhost",
+        :username => ENV['RSS_DB_USERNAME'] || "root",
+        :password => ENV['RSS_DB_PASSWORD'] || ''
+      }
       @options.merge!(options)
       Mysql2::Client.default_query_options.merge!(:symbolize_keys => true)
     end
