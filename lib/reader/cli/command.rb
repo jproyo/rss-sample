@@ -7,7 +7,7 @@ module Reader
     def channels
       puts "Channels List"
       puts "============="
-      Client.new(Feeder.new, Persistence.new).channels.each do |c|
+      Client.new.channels.each do |c|
         puts "Channel id #{c.id} - Title #{c.title} - Link #{c.link}"
       end
     end
@@ -16,7 +16,7 @@ module Reader
     def items(channel_id)
       puts "Last Items List for Channel #{channel_id}"
       puts "========================================="
-      Client.new(Feeder.new, Persistence.new).retrieve_from(channel_id).each do |c|
+      Client.new.retrieve_from(channel_id).each do |c|
         puts "Item Title #{c.title_enc} - Link #{c.guid}"
         puts "============================================================\n"
         puts "Item Description #{CGI.unescapeHTML(c.description_enc)}"
@@ -28,7 +28,7 @@ module Reader
     def items_all(channel_id)
       puts "All Items List for Channel #{channel_id}"
       puts "========================================="
-      Client.new(Feeder.new, Persistence.new).retrieve_all_from(channel_id).each do |c|
+      Client.new.retrieve_all_from(channel_id).each do |c|
         puts "Item Title #{c.title_enc} - Link #{c.guid}"
         puts "============================================================\n"
         puts "Item Description #{CGI.unescapeHTML(c.description_enc)}"

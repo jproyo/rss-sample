@@ -7,7 +7,7 @@ module Reader
 
     def initialize(feeder=nil, persistence=nil)
       @feeder = feeder || Feeder.new
-      @persistence = persistence || Persistence.new(:host => "localhost", :username => "root")
+      @persistence = persistence || Persistence.new
     end
 
     def channels
