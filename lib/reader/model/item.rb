@@ -15,7 +15,7 @@ module Reader
     end
 
     def description
-      @description.force_encoding("UTF-8")
+      CGI.unescapeHTML(@description.force_encoding("UTF-8"))
     end
   end
 

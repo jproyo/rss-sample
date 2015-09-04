@@ -14,10 +14,19 @@ module Reader
       @persistence.channels
     end
 
+    def channel(id)
+      @persistence.channel_by_id(id)
+    end
+
     def retrieve_from(channel_id)
-      channel = @persistence.channel_by_id(channel_id)
-      items = @feeder.rss_from(channel.link).items.map(&Item.method(:new))
+      channel = channel(channel_id)
+      items = retrieve_all_from(channel_id)
       @persistence.save(items,channel).select{ |i| i.was_updated }
+    end
+
+    def retrieve_all_from(channel_id)
+      channel = channel(channel_id)
+      @feeder.rss_from(channel.link).items.map(&Item.method(:new))
     end
 
   end
