@@ -5,9 +5,9 @@ module Reader
 
     attr_accessor :feeder, :persistence
 
-    def initialize(feeder=nil)
+    def initialize(feeder=nil, persistence=nil)
       @feeder = feeder || Feeder.new
-      @persistence = Persistence.new
+      @persistence = persistence || Persistence.new(:host => "localhost", :username => "root")
     end
 
     def channels
@@ -17,6 +17,7 @@ module Reader
     def retrieve_from(channel)
       rss = @feeder.rss_from channel.link
       items = rss.items.map(&Item.method(:new))
+      @persistence.save(items,channel).select{ |i| i.was_updated }
     end
 
   end

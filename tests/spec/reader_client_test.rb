@@ -12,7 +12,9 @@ describe "Retrieve items from Channel" do
     results = mock()
     feeder.expects(:rss_from).with(url).returns(results)
     results.expects(:items).returns([:link => "item1", :link=> "item2"])
-    client = Reader::Client.new(feeder)
+    persistence = mock()
+    persistence.expects(:save).returns([{:link => "item1", :was_updated=>true}, {:link=> "item2",:was_updated=>true}].map(&Reader::Item.method(:new)))
+    client = Reader::Client.new(feeder,persistence)
     items = client.retrieve_from channel
     items.wont_be_nil
     items.wont_be_empty 
@@ -28,7 +30,9 @@ describe "Retrieve items from Channel" do
     results = mock()
     feeder.expects(:rss_from).with(url).returns(results)
     results.expects(:items).returns([])
-    client = Reader::Client.new(feeder)
+    persistence = mock()
+    persistence.expects(:save).returns([{:link => "item1", :was_updated=>false}, {:link=> "item2",:was_updated=>false}].map(&Reader::Item.method(:new)))
+    client = Reader::Client.new(feeder,persistence)
     items = client.retrieve_from channel
     items.wont_be_nil
     items.must_be_empty 
@@ -45,6 +49,8 @@ describe "Retrieve items from Channel" do
     results = mock()
     feeder.expects(:rss_from).raises
     results.expects(:items).never
+    persistence = mock()
+    client = Reader::Client.new(feeder,persistence)    
     client = Reader::Client.new(feeder)
     -> { client.retrieve_from channel }.must_raise RuntimeError
 
