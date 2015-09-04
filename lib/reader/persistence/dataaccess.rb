@@ -16,7 +16,9 @@ module Reader
     end
 
     def channel_by_id(id)
-      Channel.new(client.xquery("select * from channels where id = ?",id).first)
+      channel = client.xquery("select * from channels where id = ?",id).first
+      Channel.new(channel) unless channel.nil?
+      nil
     end
 
     def save(items, channel)

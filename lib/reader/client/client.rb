@@ -26,7 +26,8 @@ module Reader
 
     def retrieve_all_from(channel_id)
       channel = channel(channel_id)
-      @feeder.rss_from(channel.link).items.map(&Item.method(:new))
+      return @feeder.rss_from(channel.link).items.map(&Item.method(:new)) unless channel.nil?
+      []
     end
 
   end
