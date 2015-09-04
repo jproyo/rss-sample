@@ -10,7 +10,8 @@ module Reader
     end
 
     def retrieve_from(url)
-      
+      rss = @feeder.rss_from url
+      rss.items
     end
 
   end
