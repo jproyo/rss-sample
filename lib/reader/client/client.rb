@@ -9,6 +9,10 @@ module Reader
       @feeder = feeder || Feeder.new
     end
 
+    def retrieve_from(url)
+      
+    end
+
   end
 
 end
